@@ -13,7 +13,6 @@ class GraphComposition:
         self.initial_vertices = self.not_viewed_vertices.copy()
         self.sums_of_external_links = []
         self.not_viewed_sets = []
-        self.Q = {}
 
     @staticmethod
     def read_graph(path_to_file: str) -> list:
@@ -110,15 +109,13 @@ class GraphComposition:
         Алгоритм итерационного улучшения решения
         :return:
         """
-        from uuid import uuid1
-        #self.vertex_sets = [[0, 1], [2, 3, 4], [5, 6, 7]] # для тестирования на примере из лекции
+        # self.vertex_sets = [[0, 1], [2, 3, 4], [5, 6, 7]] # для тестирования на примере из лекции
         self.not_viewed_sets = self.vertex_sets.copy()
 
         while len(self.not_viewed_sets) > 1:
             while self.calculate_r_function():
                 pass
             self.not_viewed_sets.pop(0)
-
 
     def calculate_objective_function(self) -> int:
         """
@@ -185,5 +182,3 @@ class GraphComposition:
         for item in v_set:
             set_sum += self.graph[row][item]
         return set_sum
-
-

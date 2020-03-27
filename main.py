@@ -11,10 +11,8 @@ def main():
     g = GraphComposition('graph.csv')
     constraints = range(3, 8)
     with open('containers.csv') as file:
-        counter = 0
         s = csv.reader(file, delimiter='\t')
         for config_row in s:
-            counter += 1
             for i, j in enumerate(config_row):
                 config_row[i] = int(j)
             for i in config_row:
@@ -25,7 +23,6 @@ def main():
                     wrong_container_len = False
             if wrong_container_len:
                 continue
-            # print(counter)
             # config_row = [2,3,3]
             for n in config_row:
                 if len(g.not_viewed_vertices) != n:
@@ -46,7 +43,7 @@ def main():
             c += 1
             g.not_viewed_vertices = g.initial_vertices.copy()
             g.vertex_sets = []
-            g.sums_of_external_links = []
+            g.sums_of_external_links.clear()
     min_composition = get_min_composition(composition_results)
 
     g = GraphAllocation(g.graph, [[0, 5], [2, 6, 4], [1, 3, 7]])

@@ -1,17 +1,19 @@
 import csv
 
+from graph import Graph
 
-class GraphComposition:
+
+class GraphComposition(Graph):
     """
     Класс реализует методы для решения задачи компоновки
     """
 
     def __init__(self, path_to_file):
+        super(GraphComposition, self).__init__()
         self.graph = self.read_graph(path_to_file)
         self.vertex_sets = []
         self.not_viewed_vertices = [i for i, j in enumerate(self.graph)]
         self.initial_vertices = self.not_viewed_vertices.copy()
-        self.sums_of_external_links = []
         self.not_viewed_sets = []
 
     @staticmethod
@@ -34,6 +36,7 @@ class GraphComposition:
         """
         self.sums_of_external_links = self.get_rows_sums(self.not_viewed_vertices, self.not_viewed_vertices)
         min_el = min(self.sums_of_external_links)
+        # return self.sums_of_external_links.index(min_el)
         candidates = []
         for v, s in enumerate(self.sums_of_external_links):
             if s <= min_el:
@@ -49,23 +52,6 @@ class GraphComposition:
             return candidates[count_list.index(min(count_list))]
         else:
             return candidates[0]
-
-    def get_rows_sums(self, vertex_rows, vertex_cols, find='min') -> list:
-        """
-        Возвращает список сумм vertex_cols по vertex_rows.
-        В общем случае список имеет пустые элементы, которые заполняются placeholder
-        для возможности нахождения максимального или минимального элемента списка
-        """
-        placeholder = 1000
-        if find == 'max':
-            placeholder = -1
-        rows_sum = [placeholder for i in range(len(self.graph))]
-        for row in vertex_rows:
-            row_sum = 0
-            for col in vertex_cols:
-                row_sum += self.graph[row][col]
-            rows_sum[row] = row_sum
-        return rows_sum
 
     def remove_vertex_from_set(self, vertices: list) -> None:
         """

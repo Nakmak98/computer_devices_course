@@ -23,7 +23,7 @@ def main():
                     wrong_container_len = False
             if wrong_container_len:
                 continue
-            # config_row = [2,3,3]
+            config_row.reverse()
             for n in config_row:
                 if len(g.not_viewed_vertices) != n:
                     v = g.get_min_linked_vertex()
@@ -44,10 +44,27 @@ def main():
             g.not_viewed_vertices = g.initial_vertices.copy()
             g.vertex_sets = []
             g.sums_of_external_links.clear()
-    min_composition = get_min_composition(composition_results)
+    get_min_composition(composition_results)
 
-    g = GraphAllocation(g.graph, [[0, 5], [2, 6, 4], [1, 3, 7]])
-    exit()
+    g = GraphAllocation(g.graph)
+    while len(g.viewed_vertices) < len(g.not_viewed_vertices):
+        min_k = g.get_K()
+        g.discrets.append(min_k)
+        g.viewed_vertices.append(min_k)
+    g.build_T()
+    while True:
+        max_L = g.get_L()
+        mc = g.v_in_mass_center(max_L)
+        dl = []
+        for i in mc:
+            dl.append(g.delta_L(i, max_L))
+        m = dl.index(min(dl))
+        if dl[m] < 0:
+            mc = mc[m]
+            g.swap_T_items(g.T, mc, max_L)
+        else:
+            get_min_allocation(g)
+            break
 
 
 def get_min_composition(compositions):
@@ -55,6 +72,11 @@ def get_min_composition(compositions):
     min_links = min(links)
     print("min links: ", min_links)
     print("composition: ", compositions[links.index(min_links)]['composition'])
+
+
+def get_min_allocation(g):
+    print("min links: ", g.get_Q())
+    print("allocation: ", g.T)
 
 
 if __name__ == '__main__':

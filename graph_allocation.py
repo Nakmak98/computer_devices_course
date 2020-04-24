@@ -39,13 +39,11 @@ class GraphAllocation(Graph):
         t[m][i], t[n][j] = t[n][j], t[m][i]
 
     def v_in_mass_center(self, vertex) -> list:
-        from math import ceil
-        self.T_rev = self.T.copy()
-        self.T_rev.reverse()
+        from math import ceil, floor
         Xc, Yc, mass_center = [], [], []
         for i, val in enumerate(self.graph[vertex]):
             if i != vertex:
-                y, x = self.find_v_in_T(i, self.T_rev)
+                y, x = self.find_v_in_T(i, self.T)
                 y += 1
                 x += 1
                 Xc.append(x * val)
@@ -53,10 +51,10 @@ class GraphAllocation(Graph):
         Xc = sum(Xc) / self.sums_of_external_links[vertex] - 1
         Yc = sum(Yc) / self.sums_of_external_links[vertex] - 1
 
-        Xc = [round(Xc), ceil(Xc)]
-        Yc = [round(Yc), ceil(Yc)]
+        Xc = [floor(Xc), ceil(Xc)]
+        Yc = [floor(Yc), ceil(Yc)]
 
-        for i, row in enumerate(self.T_rev):
+        for i, row in enumerate(self.T):
             for j, val in enumerate(row):
                 if i in Yc and j in Xc:
                     mass_center.append(val)
